@@ -2,7 +2,7 @@ import sys
 import os
 import cv2
 import yaml
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox, QInputDialog
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt, QTimer, pyqtSlot
 
@@ -45,42 +45,54 @@ class YoloViewer(QWidget):
         self.num_classes = 0
         self.timer = QTimer()
         self.timer.timeout.connect(self.timer_event)
-        self.play_speed = 500  # milliseconds per image
+        self.play_speed = 33  # milliseconds per image
         self.yaml_file_name = ''
+
+    def list_folders(self, directory):
+        return [d for d in os.listdir(directory) if os.path.isdir(os.path.join(directory, d))]
+
     def load_dataset(self):
         options = QFileDialog.Options()
         folder = QFileDialog.getExistingDirectory(self, 'Select Dataset Folder', '', options=options)
         
         if folder:
-            self.image_folder = os.path.join(folder, 'valid/images')
-            self.image_files = sorted([f for f in os.listdir(self.image_folder) if f.endswith(('png', 'jpg', 'jpeg'))])
-            self.current_index = 0
-            for root, dirs, files in os.walk(folder):
-                for file in files:
-                    if file.endswith(".yaml"):
-                        self.yaml_file_name = file
-                        break
-                    # Check if yaml_file_name is empty
-            if not self.yaml_file_name:
-                QMessageBox.critical(self, "Error", "YAML file not found in the dataset folder!")
+            subfolders = self.list_folders(folder)
+            if not subfolders:
+                QMessageBox.critical(self, "Error", "No subfolders found in the selected directory!")
                 return
+
+            selected_folder, ok = QInputDialog.getItem(self, "Select Folder", "Folders:", subfolders, 0, False)
+            if ok and selected_folder:
+                self.image_folder = os.path.join(folder, selected_folder, 'images')
+                self.image_files = sorted([f for f in os.listdir(self.image_folder) if f.endswith(('png', 'jpg', 'jpeg'))])
+                self.current_index = 0
+                for root, dirs, files in os.walk(folder):
+                    for file in files:
+                        if file.endswith(".yaml"):
+                            self.yaml_file_name = file
+                            break
+
+                        # Check if yaml_file_name is empty
+                if not self.yaml_file_name:
+                    QMessageBox.critical(self, "Error", "YAML file not found in the dataset folder!")
+                    return
                    
-            # Load class names and number of classes from YAML file
-            yaml_file = os.path.join(folder, self.yaml_file_name )
-            if os.path.exists(yaml_file):
-                with open(yaml_file, 'r') as f:
-                    data = yaml.safe_load(f)
-                    if 'names' in data:
-                        self.class_names = data['names']
-                        self.num_classes = len(self.class_names)
+                # Load class names and number of classes from YAML file
+                yaml_file = os.path.join(folder, self.yaml_file_name)
+                if os.path.exists(yaml_file):
+                    with open(yaml_file, 'r') as f:
+                        data = yaml.safe_load(f)
+                        if 'names' in data:
+                            self.class_names = data['names']
+                            self.num_classes = len(self.class_names)
 
-            # Handle case where YAML file doesn't exist or is invalid
-            if self.num_classes == 0:
-                QMessageBox.critical(self, "Error", "Unable to load class names from YAML file!")
-                sys.exit(1)
+                # Handle case where YAML file doesn't exist or is invalid
+                if self.num_classes == 0:
+                    QMessageBox.critical(self, "Error", "Unable to load class names from YAML file!")
+                    sys.exit(1)
 
-            if self.image_files:
-                self.display_image()
+                if self.image_files:
+                    self.display_image()
 
     def display_image(self):
         if self.current_index >= 0 and self.current_index < len(self.image_files):
