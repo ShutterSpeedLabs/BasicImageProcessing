@@ -49,7 +49,7 @@ def resize_image(image, max_width, max_height):
 def display_dataset(yaml_path):
     config = read_yaml(yaml_path)
     
-    dataset_path = Path(config.get('path', '/media/parashuram/AutoData2/a2d2_instance/'))
+    dataset_path = Path(config.get('path', '/media/parashuram/AutoData2/a2d2_inst_seg/'))
     class_names = config.get('names', [])
     
     if not class_names:
@@ -123,5 +123,5 @@ def display_dataset(yaml_path):
     print(f"Images without labels: {total_images - images_with_labels}")
 
 # Usage
-yaml_path = "/media/parashuram/AutoData2/a2d2_instance/dataset.yaml"
+yaml_path = "/media/parashuram/AutoData2/a2d2_inst_seg/dataset_seg.yaml"
 display_dataset(yaml_path)
