@@ -43,21 +43,21 @@ print(f"\nSample image names: {list(image_dict.keys())[:5]}")
 mask_folder = Path("/media/parashuram/AutoData/A2D2/camera_lidar_semantic_instance/")
 
 # Find all mask files
-mask_files = list(mask_folder.rglob("**/cam_front_center/*.png"))
+mask_files = list(mask_folder.rglob("**/instance/cam_front_center/*.png"))
 mask_files.sort()
 
 print(f"\nTotal mask files found: {len(mask_files)}")
-print(f"Sample mask names: {[mask.name for mask in mask_files[:5]]}")
+print(f"Sample mask paths: {[str(mask) for mask in mask_files[:5]]}")
 
 current_index = 0
 
 while current_index < len(mask_files):
     mask_file = mask_files[current_index]
     
-    # Extract the matching part of the filename
-    match = re.search(r'(\d+)_instance_frontcenter_(\d+)\.png', str(mask_file.name))
+    # Extract the matching part of the filename, including the prefix
+    match = re.search(r'(\d+_\d+)\/instance\/cam_front_center\/(\d+)_instance_frontcenter_(\d+)\.png', str(mask_file))
     if match:
-        date_part, frame_part = match.groups()
+        prefix, date_part, frame_part = match.groups()
         image_file_pattern = f"{date_part}_camera_frontcenter_{frame_part}.jpg"
         
         # Try to find the matching image
@@ -90,7 +90,7 @@ while current_index < len(mask_files):
             print(f"Some nearby file names: {nearby_files}")
             current_index += 1
     else:
-        print(f"Couldn't parse filename: {mask_file.name}")
+        print(f"Couldn't parse filename: {mask_file}")
         current_index += 1
 
 cv2.destroyAllWindows()
