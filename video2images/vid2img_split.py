@@ -52,6 +52,8 @@ def save_video_frames(video_path, output_base_folder, width=640, height=368, fra
     print(f"Frames saved in folders under: {output_base_folder}")
 
 # Example usage
-video_path = "/media/kisna/dataset/Project_Bollywood/RRTN-old-film-restoration/videos/MeraNaamChinChinChu.mkv"  # Replace with your video file path
-output_base_folder = "/media/kisna/dataset/Project_Bollywood/RRTN-old-film-restoration/videos/chin_chin_chu"  # Replace with your desired output folder
-save_video_frames(video_path, output_base_folder, start_frame=201)
+video_path = "/media/kisna/dataset/Project_Bollywood/videos/ManDoleMeraTanDole.mp4"  # Replace with your video file path
+# Extract video filename without extension and use it as output folder name
+video_filename = os.path.splitext(os.path.basename(video_path))[0]
+output_base_folder = os.path.join(os.path.dirname(video_path), video_filename)
+save_video_frames(video_path, output_base_folder, start_frame=1)
