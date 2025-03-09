@@ -1,42 +1,39 @@
 import cv2
 import os
+import subprocess
 from tqdm import tqdm
 
 def downscale_video(input_path, width, height, start_frame=0):
     # Extract the video filename without extension
     video_filename = os.path.splitext(os.path.basename(input_path))[0]
-    
-    # Create the output path in the same directory as the input file
     output_filename = f"{video_filename}_downscaled.mp4"
     output_path = os.path.join(os.path.dirname(input_path), output_filename)
-    
-    cap = cv2.VideoCapture(input_path)
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(output_path, fourcc, cap.get(cv2.CAP_PROP_FPS), (width, height))
 
-    # Get the total number of frames
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    # Use ffmpeg directly for video processing
+    ffmpeg_cmd = [
+        'ffmpeg', '-y',  # -y to overwrite output file
+        '-i', input_path,
+        '-vf', f'scale={width}:{height}',
+        '-c:v', 'libx264',  # Use H.264 codec
+        '-preset', 'medium',  # Balance between speed and compression
+        '-crf', '23',  # Constant Rate Factor (0-51, lower means better quality)
+        '-pix_fmt', 'yuv420p',  # Standard pixel format for compatibility
+        output_path
+    ]
 
-    # Set the starting frame
-    cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
-
-    with tqdm(total=total_frames - start_frame, desc="Downscaling Video", unit="frame") as pbar:
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
-            resized_frame = cv2.resize(frame, (width, height))
-            out.write(resized_frame)
-            pbar.update(1)
-
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
+    try:
+        print(f"Processing video: {input_path}")
+        print(f"Output will be saved as: {output_path}")
+        subprocess.run(ffmpeg_cmd, check=True)
+        print(f"Video processing completed successfully!")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error processing video: {str(e)}")
+        return False
 
 # Example usage
-input_path = "/media/kisna/dataset/Project_Bollywood/yt_dl/Ankhiyon Ke Jharokhon Se-Hemlata [HD-1080p].mp4"  # Replace with your video file path
-width = 640
-height = 368
-start_frame = 1
-
-downscale_video(input_path, width, height, start_frame)
+if __name__ == "__main__":
+    input_path = "/media/kisna/bkp_data/DeOldify/BnW_Videos/येह रातें येह मौसम.mp4"
+    width = 640
+    height = 368
+    downscale_video(input_path, width, height)
