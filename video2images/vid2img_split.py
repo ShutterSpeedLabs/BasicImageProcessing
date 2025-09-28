@@ -6,7 +6,8 @@ def save_video_frames(video_path, output_base_folder, width=640, height=368, fra
     # Create the base output folder if it doesn't exist
     os.makedirs(output_base_folder, exist_ok=True)
 
-    # Open the video file
+    # Open the video file with FFMPEG backend
+    os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "video_codec;h264"  # Force H264 decoder
     cap = cv2.VideoCapture(video_path)
     
     if not cap.isOpened():
@@ -52,8 +53,27 @@ def save_video_frames(video_path, output_base_folder, width=640, height=368, fra
     print(f"Frames saved in folders under: {output_base_folder}")
 
 # Example usage
-video_path = "/media/kisna/bkp_data/DeOldify/video_data/videos/yeRateinYeMausamNadiKaKinara.mp4"  # Replace with your video file path
-# Extract video filename without extension and use it as output folder name
-video_filename = os.path.splitext(os.path.basename(video_path))[0]
-output_base_folder = os.path.join(os.path.dirname(video_path), video_filename)
-save_video_frames(video_path, output_base_folder, start_frame=1)
+if __name__ == "__main__":
+    try:
+        video_path = "/media/kisna/bkp_data/DeOldify/video_data/videos/yeRateinYeMausamNadiKaKinara.mp4"  # Replace with your video file path
+        # Extract video filename without extension and use it as output folder name
+        video_filename = os.path.splitext(os.path.basename(video_path))[0]
+        output_base_folder = os.path.join(os.path.dirname(video_path), video_filename)
+        
+        # Try to convert the video to H264 format first if needed
+        temp_video_path = os.path.join(output_base_folder, "temp_video.mp4")
+        os.makedirs(output_base_folder, exist_ok=True)
+        
+        # Convert video to H264 format
+        os.system(f'ffmpeg -i "{video_path}" -c:v libx264 -crf 23 "{temp_video_path}" -y')
+        
+        # Use the converted video
+        save_video_frames(temp_video_path if os.path.exists(temp_video_path) else video_path, 
+                         output_base_folder, start_frame=1)
+        
+        # Clean up temporary file
+        if os.path.exists(temp_video_path):
+            os.remove(temp_video_path)
+            
+    except Exception as e:
+        print(f"Error processing video: {str(e)}")

@@ -65,6 +65,8 @@ class RectangleSelector:
 
 if __name__ == "__main__":
     # Replace with your image path
-    image_path = "/media/kisna/bkp_data/DeOldify/video_data/video_out/rrtn/test_results_30_rec2/test_data_sample/video_1/00001.png"
+    # image_path = "/media/kisna/bkp_data/DeOldify/video_data/video_out/rrtn/test_results_30_rec2/test_data_sample/video_1/00001.png"
+    image_path = "/media/kisna/bkp_data/DeOldify/video_data/videos/yeRateinYeMausamNadiKaKinara/video_1/00146.png"
+
     selector = RectangleSelector(image_path)
     selector.run()
