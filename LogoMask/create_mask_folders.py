@@ -75,10 +75,11 @@ def create_mask_folders(input_path, output_base_path, reference_image_path):
         except Exception as e:
             print(f"Error creating mask images for {folder}: {str(e)}")
 
+
 if __name__ == "__main__":
     # Example usage with actual paths
-    input_path = "/media/kisna/bkp_data/DeOldify/video_data/videos/yeRateinYeMausamNadiKaKinara"
-    output_base_path = "/media/kisna/bkp_data/DeOldify/video_data/proPainterVidOut/"
-    reference_image = "/media/kisna/bkp_data/DeOldify/video_data/proPainter_out/mask.png"
+    input_path = "/media/kisna/bkp_data/video_color/video_org/MIleSurMeraTumhara/"
+    output_base_path = "/media/kisna/bkp_data/video_color/video_mask/MIleSurMeraTumhara/"
+    reference_image = "mask.png"
     
     create_mask_folders(input_path, output_base_path, reference_image)

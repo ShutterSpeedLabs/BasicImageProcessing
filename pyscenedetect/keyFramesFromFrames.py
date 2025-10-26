@@ -46,6 +46,6 @@ def extract_keyframes(input_folder, output_folder, threshold=30):
 
 if __name__ == "__main__":
     # Example usage
-    input_folder = "/media/kisna/bkp_data/DeOldify/video_data/videos/yeRateinYeMausamNadiKaKinara/video_1/"
-    output_folder = "/media/kisna/bkp_data/DeOldify/video_data/video_key/yeRateinYeMausamNadiKaKinara/video_1_key/"
+    input_folder = "/media/kisna/bkp_data/DeOldify/video_data/vid_nb_out/yerateinyemausamnadikakinara/yerateinyemausamnadikakinara-2/test_results_50_rec2/yerateinyemausamnadikakinara-2/video_2/"
+    output_folder = "/media/kisna/bkp_data/DeOldify/vid_data_colorize/yerateinyemausamnadikakinara/video_2_key/"
     extract_keyframes(input_folder, output_folder, threshold=25)

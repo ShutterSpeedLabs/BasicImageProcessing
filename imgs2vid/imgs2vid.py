@@ -45,8 +45,8 @@ def main(video_path, image_folder, output_video_path):
     create_video_from_images(image_folder, output_video_path, fps=fps)
 
 if __name__ == "__main__":
-    video_path = "/media/kisna/bkp_data/DeOldify/video_data/videos/LekePehlaPehlaPyar.mp4"
-    image_folder = "/media/kisna/bkp_data/DeOldify/video_data/video_out/rrtn2/rrtn7/test_results_30_rec1/LekePehlaPehlaPyar/video_1"
-    output_video_path = "/media/kisna/bkp_data/DeOldify/video_data/video_out/rrtn2/rrtn7/test_results_30_rec1/LekePehlaPehlaPyar/video.mp4"
+    video_path = "/media/kisna/bkp_data/DeOldify/video_data/videos/yeRateinYeMausamNadiKaKinara.mp4"
+    image_folder = "/media/kisna/bkp_data/DeOldify/vid_data_colorize/yerateinyemausamnadikakinara/video_2"
+    output_video_path = "/media/kisna/bkp_data/DeOldify/vid_data_colorize/yerateinyemausamnadikakinara/video_2.mp4"
     
     main(video_path, image_folder, output_video_path)

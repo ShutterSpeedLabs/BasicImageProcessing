@@ -46,5 +46,5 @@ def save_video_frames(video_path, start_frame=0):
     print(f"Frames saved in folder: {output_folder}")
 
 # Example usage
-video_path = "/media/kisna/dataset/Project_Bollywood/yt_dl/Ankhiyon Ke Jharokhon Se-Hemlata [HD-1080p].mp4"  # Replace with your video file path
+video_path = "/media/kisna/bkp_data/DeOldify/RemoveWaterMark/video-watermark-removal/meraNaamChinChinChu.mkv"  # Replace with your video file path
 save_video_frames(video_path, start_frame=1)
