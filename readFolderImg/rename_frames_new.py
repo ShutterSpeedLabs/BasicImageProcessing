@@ -59,7 +59,7 @@ def rename_frames(input_path, prefix_to_remove='vi_frame_'):
 
 if __name__ == "__main__":
     # Example usage
-    input_path = "/media/kisna/bkp_data/video_color/video_out_propainter/MIleSurMeraTumhara/video_5/"
+    input_path = "/media/kisna/bkp_data/DeOldify/video_data/proPainter_out/video_2_out/"
     prefix_to_remove = "vi_frame_"
     
     # Confirm with user before proceeding
